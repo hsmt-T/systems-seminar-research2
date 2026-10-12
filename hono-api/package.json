@@ -4,12 +4,25 @@
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy --minify",
-    "cf-typegen": "wrangler types --env-interface CloudflareBindings"
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "lint": "pnpm cf-typegen && eslint . --max-warnings 0",
+    "lint:fix": "pnpm cf-typegen && eslint . --fix --max-warnings 0",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "typecheck": "pnpm cf-typegen && tsc --noEmit",
+    "check": "pnpm lint && pnpm format:check && pnpm typecheck"
   },
   "dependencies": {
     "hono": "^4.13.13"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.19.2",
+    "eslint": "^10.12.0",
+    "eslint-config-prettier": "10.1.8",
+    "prettier": "3.9.10",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.71.1",
     "wrangler": "^4.110.0"
   }
 }

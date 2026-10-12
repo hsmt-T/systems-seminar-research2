@@ -3,6 +3,14 @@
 Cloudflare Workers向けのHonoアプリケーションです。
 APIの機能をこのアプリケーションにまとめ、単一のWorkerとしてデプロイします。
 
+## ヘルスチェック
+
+`GET /health` はAPIが応答できる場合にHTTP 200と `{"status":"ok"}` を返します。
+
+```sh
+curl http://localhost:8787/health
+```
+
 ## Dockerでの開発
 
 Docker Engine / Docker DesktopとDocker Composeを用意して、このディレクトリで実行します。
@@ -17,6 +25,30 @@ http://localhost:8787 にアクセスすると `Hello Hono!` が返ります。
 
 DockerfileはNode.js 24とpnpm 10.24.0を使用し、ロックファイルに従って依存関係をインストールします。
 Node.jsはWranglerを実行するために使い、Hono自体はWorkersのランタイム（workerd）で動作します。
+
+## Lint・フォーマット・型チェック
+
+ESLintとtypescript-eslintの推奨ルールで型情報を使って検査し、Prettierで整形します。
+整形はシングルクォート・セミコロンなし・インデント2スペース・LF改行です。
+
+```sh
+pnpm check         # Lint・整形の検査・型チェック
+pnpm lint         # 未処理のPromiseや危険なanyの利用などを検査
+pnpm lint:fix     # 修正可能なLint指摘を修正
+pnpm format       # フォーマットを適用
+pnpm format:check # フォーマットを検査
+pnpm typecheck    # Workersの型を生成してTypeScriptを検査
+```
+
+Dockerで実行する場合も、このディレクトリで実行します。
+
+```sh
+docker compose build
+docker compose run --rm hono-api pnpm check
+```
+
+Workersの型定義 `worker-configuration.d.ts` はLint・型チェック時に生成します。
+生成ファイルはGit・Lint・整形の対象から除外しています。
 
 ## DockerからCloudflare Workersへのデプロイ
 
