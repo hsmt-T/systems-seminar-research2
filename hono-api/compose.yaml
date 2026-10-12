@@ -1,0 +1,9 @@
+services:
+  hono-api:
+    build: .
+    init: true
+    ports:
+      - "127.0.0.1:8787:8787"
+    volumes:
+      - ./src:/app/src:ro
+      - ./wrangler.jsonc:/app/wrangler.jsonc:ro
