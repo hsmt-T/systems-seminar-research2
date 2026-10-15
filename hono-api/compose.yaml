@@ -1,5 +1,6 @@
 services:
   hono-api:
+    container_name: hono-api
     build: .
     init: true
     ports:
