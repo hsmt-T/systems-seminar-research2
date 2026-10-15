@@ -50,6 +50,16 @@ docker compose run --rm hono-api pnpm check
 Workersの型定義 `worker-configuration.d.ts` はLint・型チェック時に生成します。
 生成ファイルはGit・Lint・整形の対象から除外しています。
 
+## CI（GitHub Actions）
+
+リポジトリ直下の `.github/workflows/ci.yml` で、PRの作成・更新時と `main` へのpush時に
+`pnpm check`（Lint・Prettierの整形チェック・型チェック）を実行します。
+GitHubのActions画面から手動でも実行できます。
+
+CIはNode.js 24とpnpm 10.24.0を使用し、`hono-api` を作業ディレクトリにして
+`pnpm install --frozen-lockfile` で依存関係をインストールします。
+チェックに失敗した場合は、該当箇所を修正して再度pushしてください。
+
 ## DockerからCloudflare Workersへのデプロイ
 
 CloudflareのAPIトークン（Workersの編集権限）とアカウントIDを、シェルの環境変数
