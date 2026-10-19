@@ -3,9 +3,8 @@
   "name": "hono-api",
   "main": "src/index.ts",
   "compatibility_date": "2026-10-12",
-  // "compatibility_flags": [
-  //   "nodejs_compat"
-  // ],
+  "compatibility_flags": ["nodejs_compat"],
+  "secrets": { "required": ["DATABASE_URL"] },
   // "vars": {
   //   "MY_VAR": "my-variable"
   // },

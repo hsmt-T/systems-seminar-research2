@@ -3,8 +3,34 @@ services:
     container_name: hono-api
     build: .
     init: true
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://user:hono@postgres:5432/hono-db
     ports:
       - '127.0.0.1:8787:8787'
     volumes:
       - ./src:/app/src:ro
       - ./wrangler.jsonc:/app/wrangler.jsonc:ro
+      - ./.dev.vars.docker:/app/.dev.vars:ro
+      - ./prisma:/app/prisma
+      - ./prisma.config.ts:/app/prisma.config.ts:ro
+  postgres:
+    image: postgres:17
+    container_name: hono-db
+    ports:
+      - '127.0.0.1:5433:5432'
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: hono
+      POSTGRES_DB: hono-db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U user -d hono-db']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+volumes:
+  postgres_data:
