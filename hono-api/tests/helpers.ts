@@ -6,6 +6,8 @@ import type { Dependencies } from '../src/presentation/dependencies.ts'
 export function fixture(overrides: Partial<Dependencies> = {}) {
   const records: User[] = []
   const users: UserRepository = {
+    findByEmail: async (email) =>
+      records.find((user) => user.email === email) ?? null,
     async create(input) {
       if (records.some((user) => user.email === input.email))
         throw new DomainError('CONFLICT', 'Email is already registered')
@@ -16,6 +18,13 @@ export function fixture(overrides: Partial<Dependencies> = {}) {
   }
   const dependencies: Dependencies = {
     users,
+    tokens: {
+      issue: async (id) => ({
+        accessToken: `test-token:${id}`,
+        expiresIn: 3600,
+      }),
+      verify: async () => 1,
+    },
     passwords: {
       hash: async (value) => `hash:${value}`,
       verify: async (value, hash) => hash === `hash:${value}`,

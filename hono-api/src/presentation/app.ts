@@ -18,7 +18,12 @@ export function createApp(
     if (error instanceof HTTPException)
       return c.json({ error: error.message }, error.status)
     if (error instanceof DomainError) {
-      const status = error.code === 'CONFLICT' ? 409 : 400
+      const status =
+        error.code === 'CONFLICT'
+          ? 409
+          : error.code === 'UNAUTHENTICATED'
+            ? 401
+            : 400
       return c.json({ error: error.message }, status)
     }
     console.error('Request failed', error)
