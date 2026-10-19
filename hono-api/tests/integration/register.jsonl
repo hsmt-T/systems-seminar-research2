@@ -1,0 +1,5 @@
+{"path":"/health","expect":{"status":200,"body":{"status":"ok"}}}
+{"path":"/health/db","expect":{"status":200,"body":{"database":"ok"}}}
+{"method":"POST","path":"/auth/register","body":{"email":"register-test@example.com","password":"integration-test-password"},"expect":{"status":201,"body":{"user":{"email":"register-test@example.com"}}}}
+{"method":"POST","path":"/auth/register","body":{"email":"REGISTER-TEST@example.com","password":"integration-test-password"},"expect":{"status":409}}
+{"method":"POST","path":"/auth/register","body":{"email":"bad","password":"short"},"expect":{"status":400}}
