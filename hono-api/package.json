@@ -2,25 +2,37 @@
   "name": "hono-api",
   "type": "module",
   "scripts": {
-    "dev": "wrangler dev",
-    "deploy": "wrangler deploy --minify",
+    "dev": "pnpm cf-typegen && pnpm db:generate && wrangler dev",
+    "deploy": "pnpm db:generate && wrangler deploy --minify",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings",
     "lint": "pnpm cf-typegen && eslint . --max-warnings 0",
     "lint:fix": "pnpm cf-typegen && eslint . --fix --max-warnings 0",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
     "typecheck": "pnpm cf-typegen && tsc --noEmit",
-    "check": "pnpm lint && pnpm format:check && pnpm typecheck"
+    "check": "pnpm db:generate && pnpm db:validate && pnpm lint && pnpm format:check && pnpm typecheck",
+    "db:generate": "prisma generate",
+    "db:validate": "prisma validate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:studio": "prisma studio"
   },
   "dependencies": {
-    "hono": "^4.13.13"
+    "@prisma/adapter-pg": "7",
+    "@prisma/client": "7",
+    "dotenv": "^18.0.8",
+    "hono": "^4.13.13",
+    "pg": "^8.23.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@hono/cli": "1.0.0-rc.8",
     "@types/node": "^24.19.2",
+    "@types/pg": "^8.23.1",
     "eslint": "^10.12.0",
     "eslint-config-prettier": "10.1.8",
     "prettier": "3.9.10",
+    "prisma": "7",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.71.1",
     "wrangler": "^4.110.0"

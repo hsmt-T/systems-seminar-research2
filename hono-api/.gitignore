@@ -20,6 +20,8 @@ worker-configuration.d.ts
 .env
 .env.production
 .dev.vars
+.dev.vars.docker
+.dev.vars.example
 
 # logs
 logs/
@@ -32,3 +34,6 @@ lerna-debug.log*
 
 # misc
 .DS_Store
+
+# Prisma generated client
+generated/

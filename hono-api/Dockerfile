@@ -4,7 +4,9 @@ ENV WRANGLER_SEND_METRICS=false
 
 WORKDIR /app
 
-RUN npm install --global pnpm@10.24.0 \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends openssl \
+    && npm install --global pnpm@10.24.0 \
     && chown node:node /app
 
 USER node
@@ -13,6 +15,7 @@ COPY --chown=node:node package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
 
 COPY --chown=node:node . ./
+RUN pnpm db:generate
 
 EXPOSE 8787
 

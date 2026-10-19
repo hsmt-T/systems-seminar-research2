@@ -1,0 +1,17 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+  runtime  = "cloudflare"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  pass      String
+  createdAt DateTime @default(now())
+}
