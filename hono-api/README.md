@@ -209,3 +209,8 @@ docker compose run --rm \
   --env CLOUDFLARE_ACCOUNT_ID \
   hono-api pnpm deploy
 ```
+
+## EC API
+
+エンドポイント、入力・出力、オニオンアーキテクチャの構成は [docs/API.md](docs/API.md) を参照してください。
+`pnpm test` でAPIとユースケースのテストを実行します。

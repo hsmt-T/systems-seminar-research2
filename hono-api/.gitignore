@@ -12,7 +12,7 @@ dist/
 .idea/shelf
 
 # deps
-node_modules/
+node_modules
 .wrangler
 worker-configuration.d.ts
 
