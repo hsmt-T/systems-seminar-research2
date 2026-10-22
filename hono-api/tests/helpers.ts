@@ -18,6 +18,37 @@ export function fixture(overrides: Partial<Dependencies> = {}) {
     },
   }
   const dependencies: Dependencies = {
+    products: {
+      list: async () => [],
+      find: async () => null,
+      create: async () => {
+        throw new Error('Not configured')
+      },
+      update: async () => {
+        throw new Error('Not configured')
+      },
+      remove: async () => {
+        throw new Error('Not configured')
+      },
+    },
+    orders: {
+      list: async () => [],
+      find: async () => null,
+      create: async () => {
+        throw new Error('Not configured')
+      },
+      replace: async () => {
+        throw new Error('Not configured')
+      },
+      cancel: async () => {
+        throw new Error('Not configured')
+      },
+    },
+    favorites: {
+      list: async () => [],
+      add: async () => {},
+      remove: async () => {},
+    },
     users,
     tokens: {
       issue: async (id) => ({

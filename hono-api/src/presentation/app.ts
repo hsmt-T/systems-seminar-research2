@@ -1,3 +1,6 @@
+import { productRoutes } from './routes/products.ts'
+import { orderRoutes } from './routes/orders.ts'
+import { favoriteRoutes } from './routes/favorites.ts'
 import { Hono } from 'hono'
 import { bodyLimit } from 'hono/body-limit'
 import { HTTPException } from 'hono/http-exception'
@@ -19,11 +22,13 @@ export function createApp(
       return c.json({ error: error.message }, error.status)
     if (error instanceof DomainError) {
       const status =
-        error.code === 'CONFLICT'
-          ? 409
-          : error.code === 'UNAUTHENTICATED'
-            ? 401
-            : 400
+        error.code === 'NOT_FOUND'
+          ? 404
+          : error.code === 'CONFLICT'
+            ? 409
+            : error.code === 'UNAUTHENTICATED'
+              ? 401
+              : 400
       return c.json({ error: error.message }, status)
     }
     console.error('Request failed', error)
@@ -39,5 +44,9 @@ export function createApp(
       return c.json({ status: 'error', database: 'unavailable' }, 503)
     }
   })
-  return app.route('/auth', authRoutes())
+  return app
+    .route('/auth', authRoutes())
+    .route('/products', productRoutes())
+    .route('/orders', orderRoutes())
+    .route('/favorites', favoriteRoutes())
 }

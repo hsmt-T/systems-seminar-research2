@@ -87,7 +87,8 @@ Prisma CLIにはComposeの `environment.DATABASE_URL` を渡します。
 ## Prismaの操作
 
 スキーマは `prisma/schema.prisma`、マイグレーションは `prisma/migrations` です。
-`User` モデルと初回マイグレーション `20261019051817_init` を定義済みです。
+`User`・`Product`・`Order`・`OrderItem`・`Favorite` モデルを定義しています。
+商品・在庫・注文・お気に入りの仕様は [docs/API.md](docs/API.md) を参照してください。
 生成クライアント `generated/prisma` はGit管理対象外です。
 
 ```sh
