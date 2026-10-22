@@ -10,5 +10,5 @@ export type Dependencies = {
 }
 export type AppEnv = {
   Bindings: CloudflareBindings
-  Variables: { dependencies: Dependencies }
+  Variables: { dependencies: Dependencies; userId: number }
 }

@@ -57,3 +57,8 @@ pnpm exec wrangler secret put JWT_SECRET
 ```
 
 平文の既存 `User.pass` はログインに利用できない。パスワードを再登録する運用が必要。
+
+## GET /auth/me
+
+Bearer JWTが必要。200で `{ user }` を返す。認証ヘッダーなし、署名不正、有効期限切れ、削除済みユーザーは401。
+ユーザーIDはJWTから取得し、リクエストボディ等による他人のID指定を受け付けない。

@@ -6,6 +6,7 @@ import type { Dependencies } from '../src/presentation/dependencies.ts'
 export function fixture(overrides: Partial<Dependencies> = {}) {
   const records: User[] = []
   const users: UserRepository = {
+    findById: async (id) => records.find((user) => user.id === id) ?? null,
     findByEmail: async (email) =>
       records.find((user) => user.email === email) ?? null,
     async create(input) {
@@ -23,7 +24,11 @@ export function fixture(overrides: Partial<Dependencies> = {}) {
         accessToken: `test-token:${id}`,
         expiresIn: 3600,
       }),
-      verify: async () => 1,
+      verify: async (token) => {
+        if (!/^test-token:[1-9]\d*$/.test(token))
+          throw new DomainError('UNAUTHENTICATED', 'Invalid or expired token')
+        return Number(token.split(':')[1])
+      },
     },
     passwords: {
       hash: async (value) => `hash:${value}`,

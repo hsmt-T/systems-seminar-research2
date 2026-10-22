@@ -1,0 +1,5 @@
+{"method":"POST","path":"/auth/register","body":{"email":"me-test@example.com","password":"integration-test-password"},"expect":{"status":201}}
+{"method":"POST","path":"/auth/login","body":{"email":"me-test@example.com","password":"integration-test-password"},"save":{"token":".accessToken"},"expect":{"status":200}}
+{"path":"/auth/me","headers":{"Authorization":"Bearer {{token}}"},"expect":{"status":200,"body":{"user":{"email":"me-test@example.com"}}}}
+{"path":"/auth/me","expect":{"status":401}}
+{"path":"/auth/me","headers":{"Authorization":"Bearer bad-token"},"expect":{"status":401}}
