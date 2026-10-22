@@ -9,9 +9,73 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
   name      String?
   pass      String
+  createdAt DateTime   @default(now())
+  products  Product[]
+  orders    Order[]
+  favorites Favorite[]
+}
+
+model Product {
+  id        Int         @id @default(autoincrement())
+  ownerId   Int
+  owner     User        @relation(fields: [ownerId], references: [id], onDelete: Restrict)
+  sku       String      @unique @db.VarChar(64)
+  name      String      @db.VarChar(200)
+  price     Int
+  stock     Int
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  deletedAt DateTime?
+  items     OrderItem[]
+  favorites Favorite[]
+
+  @@index([ownerId])
+}
+
+enum OrderStatus {
+  PLACED
+  CANCELLED
+}
+
+model Order {
+  id        Int         @id @default(autoincrement())
+  userId    Int
+  user      User        @relation(fields: [userId], references: [id], onDelete: Restrict)
+  status    OrderStatus @default(PLACED)
+  total     Int
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  items     OrderItem[]
+
+  @@index([userId, id])
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+  name      String
+  sku       String
+  unitPrice Int
+  quantity  Int
+
+  @@unique([orderId, productId])
+  @@index([productId])
+}
+
+model Favorite {
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
+
+  @@id([userId, productId])
+  @@index([productId])
 }

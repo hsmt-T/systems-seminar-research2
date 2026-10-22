@@ -4,7 +4,7 @@
   "main": "src/index.ts",
   "compatibility_date": "2026-10-12",
   "compatibility_flags": ["nodejs_compat"],
-  "secrets": { "required": ["DATABASE_URL"] },
+  "secrets": { "required": ["DATABASE_URL", "JWT_SECRET"] },
   // "vars": {
   //   "MY_VAR": "my-variable"
   // },

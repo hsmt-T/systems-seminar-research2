@@ -17,10 +17,9 @@ if (!file)
   throw new Error(
     'Usage: node scripts/check-api.mjs tests/integration/<file>.jsonl',
   )
-const input = readFileSync(file, 'utf8').replaceAll(
-  '@example.com',
-  `-${randomUUID()}@example.com`,
-)
+const input = readFileSync(file, 'utf8')
+  .replaceAll('TEST_RUN', randomUUID())
+  .replaceAll('@example.com', `-${randomUUID()}@example.com`)
 const result = spawnSync(
   'pnpm',
   ['exec', 'hono', 'batch', '-', '--runtime', 'workerd'],

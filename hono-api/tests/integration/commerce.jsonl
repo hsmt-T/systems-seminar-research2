@@ -1,0 +1,48 @@
+{"path":"/health","expect":{"status":200,"body":{"status":"ok"}}}
+{"path":"/health/db","expect":{"status":200,"body":{"status":"ok","database":"ok"}}}
+{"method":"POST","path":"/auth/register","body":{"email":"seller@example.com","password":"integration-test-password"},"expect":{"status":201}}
+{"method":"POST","path":"/auth/login","body":{"email":"seller@example.com","password":"integration-test-password"},"save":{"seller":".accessToken"},"expect":{"status":200}}
+{"method":"POST","path":"/auth/register","body":{"email":"buyer@example.com","password":"integration-test-password"},"expect":{"status":201}}
+{"method":"POST","path":"/auth/login","body":{"email":"buyer@example.com","password":"integration-test-password"},"save":{"buyer":".accessToken"},"expect":{"status":200}}
+{"path":"/auth/me","headers":{"Authorization":"Bearer {{buyer}}"},"expect":{"status":200}}
+{"path":"/products","expect":{"status":200}}
+{"method":"POST","path":"/products","body":{"sku":"TEST_RUN-a","name":"Coffee","price":500,"stock":5},"expect":{"status":401}}
+{"method":"POST","path":"/products","headers":{"Authorization":"Bearer {{seller}}"},"body":{"sku":"TEST_RUN-a","name":"Coffee","price":500,"stock":5},"save":{"a":".product.id"},"expect":{"status":201,"body":{"product":{"price":500,"stock":5}}}}
+{"method":"POST","path":"/products","headers":{"Authorization":"Bearer {{seller}}"},"body":{"sku":"TEST_RUN-a","name":"Duplicate","price":500,"stock":5},"expect":{"status":409}}
+{"path":"/products/{{a}}","expect":{"status":200,"body":{"product":{"name":"Coffee"}}}}
+{"method":"PATCH","path":"/products/{{a}}","headers":{"Authorization":"Bearer {{buyer}}"},"body":{"stock":99},"expect":{"status":404}}
+{"method":"DELETE","path":"/products/{{a}}","headers":{"Authorization":"Bearer {{buyer}}"},"expect":{"status":404}}
+{"method":"PATCH","path":"/products/{{a}}","headers":{"Authorization":"Bearer {{seller}}"},"body":{"stock":-1},"expect":{"status":400}}
+{"method":"PATCH","path":"/products/{{a}}","headers":{"Authorization":"Bearer {{seller}}"},"body":{"name":"Special Coffee"},"expect":{"status":200}}
+{"method":"PUT","path":"/favorites/{{a}}","headers":{"Authorization":"Bearer {{buyer}}"},"expect":{"status":204}}
+{"method":"PUT","path":"/favorites/{{a}}","headers":{"Authorization":"Bearer {{buyer}}"},"expect":{"status":204}}
+{"path":"/favorites","headers":{"Authorization":"Bearer {{buyer}}"},"expect":{"status":200}}
+{"path":"/favorites","headers":{"Authorization":"Bearer {{seller}}"},"expect":{"status":200,"body":{"products":[]}}}
+{"method":"DELETE","path":"/favorites/{{a}}","headers":{"Authorization":"Bearer {{seller}}"},"expect":{"status":204}}
+{"method":"POST","path":"/orders","headers":{"Authorization":"Bearer {{buyer}}"},"body":{"items":[{"productId":"{{a}}","quantity":2}]},"save":{"order":".order.id"},"expect":{"status":201,"body":{"order":{"status":"PLACED","total":1000}}}}
+{"path":"/products/{{a}}","expect":{"status":200,"body":{"product":{"stock":3}}}}
+{"method":"POST","path":"/orders","headers":{"Authorization":"Bearer {{buyer}}"},"body":{"items":[{"productId":"{{a}}","quantity":4}]},"expect":{"status":409}}
+{"path":"/products/{{a}}","expect":{"status":200,"body":{"product":{"stock":3}}}}
+{"path":"/orders/{{order}}","headers":{"Authorization":"Bearer {{seller}}"},"expect":{"status":404}}
+{"method":"PUT","path":"/orders/{{order}}","headers":{"Authorization":"Bearer {{seller}}"},"body":{"items":[{"productId":"{{a}}","quantity":1}]},"expect":{"status":404}}
+{"method":"DELETE","path":"/orders/{{order}}","headers":{"Authorization":"Bearer {{seller}}"},"expect":{"status":404}}
+{"path":"/orders","headers":{"Authorization":"Bearer {{seller}}"},"expect":{"status":200,"body":{"orders":[]}}}
+{"method":"PUT","path":"/orders/{{order}}","headers":{"Authorization":"Bearer {{buyer}}"},"body":{"items":[{"productId":"{{a}}","quantity":6}]},"expect":{"status":409}}
+{"path":"/products/{{a}}","expect":{"status":200,"body":{"product":{"stock":3}}}}
+{"method":"PUT","path":"/orders/{{order}}","headers":{"Authorization":"Bearer {{buyer}}"},"body":{"items":[{"productId":"{{a}}","quantity":3}]},"expect":{"status":200,"body":{"order":{"total":1500}}}}
+{"path":"/products/{{a}}","expect":{"status":200,"body":{"product":{"stock":2}}}}
+{"method":"DELETE","path":"/orders/{{order}}","headers":{"Authorization":"Bearer {{buyer}}"},"expect":{"status":204}}
+{"method":"DELETE","path":"/orders/{{order}}","headers":{"Authorization":"Bearer {{buyer}}"},"expect":{"status":204}}
+{"path":"/products/{{a}}","expect":{"status":200,"body":{"product":{"stock":5}}}}
+{"path":"/orders/{{order}}","headers":{"Authorization":"Bearer {{buyer}}"},"expect":{"status":200,"body":{"order":{"status":"CANCELLED","total":1500}}}}
+{"method":"PUT","path":"/orders/{{order}}","headers":{"Authorization":"Bearer {{buyer}}"},"body":{"items":[{"productId":"{{a}}","quantity":1}]},"expect":{"status":409}}
+{"method":"DELETE","path":"/favorites/{{a}}","headers":{"Authorization":"Bearer {{buyer}}"},"expect":{"status":204}}
+{"method":"DELETE","path":"/favorites/{{a}}","headers":{"Authorization":"Bearer {{buyer}}"},"expect":{"status":204}}
+{"path":"/favorites","headers":{"Authorization":"Bearer {{buyer}}"},"expect":{"status":200,"body":{"products":[]}}}
+{"method":"PUT","path":"/favorites/{{a}}","headers":{"Authorization":"Bearer {{buyer}}"},"expect":{"status":204}}
+{"method":"DELETE","path":"/products/{{a}}","headers":{"Authorization":"Bearer {{seller}}"},"expect":{"status":204}}
+{"path":"/products/{{a}}","expect":{"status":404}}
+{"path":"/favorites","headers":{"Authorization":"Bearer {{buyer}}"},"expect":{"status":200,"body":{"products":[]}}}
+{"method":"PUT","path":"/favorites/{{a}}","headers":{"Authorization":"Bearer {{buyer}}"},"expect":{"status":404}}
+{"method":"POST","path":"/orders","headers":{"Authorization":"Bearer {{buyer}}"},"body":{"items":[{"productId":"{{a}}","quantity":1}]},"expect":{"status":404}}
+{"path":"/orders/{{order}}","headers":{"Authorization":"Bearer {{buyer}}"},"expect":{"status":200,"body":{"order":{"items":[{"name":"Special Coffee","unitPrice":500}]}}}}

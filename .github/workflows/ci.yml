@@ -16,14 +16,29 @@ concurrency:
 
 jobs:
   check:
-    name: Lint, format, and typecheck
+    name: API checks and integration tests
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: hono
+          POSTGRES_DB: ec_api_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U user -d ec_api_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     defaults:
       run:
         working-directory: hono-api
     env:
-      WRANGLER_SEND_METRICS: 'false'
+      WRANGLER_SEND_METRICS: "false"
+      DATABASE_URL: postgresql://user:hono@localhost:5432/ec_api_test
 
     steps:
       - name: Checkout repository
@@ -40,7 +55,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: '24'
+          node-version: "24"
           cache: pnpm
           cache-dependency-path: hono-api/pnpm-lock.yaml
 
@@ -49,3 +64,14 @@ jobs:
 
       - name: Run lint, format, and type checks
         run: pnpm check
+
+      - name: Prepare isolated Workers test settings
+        run: |
+          node --input-type=module <<'NODE'
+          import { writeFileSync } from 'node:fs'
+          import { randomBytes } from 'node:crypto'
+          writeFileSync('.dev.vars', `DATABASE_URL="${process.env.DATABASE_URL}"\nJWT_SECRET="${randomBytes(32).toString('hex')}"\n`)
+          NODE
+
+      - name: Run PostgreSQL and Workers integration tests
+        run: pnpm test:integration

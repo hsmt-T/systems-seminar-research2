@@ -6,6 +6,9 @@ import type { Dependencies } from '../src/presentation/dependencies.ts'
 export function fixture(overrides: Partial<Dependencies> = {}) {
   const records: User[] = []
   const users: UserRepository = {
+    findById: async (id) => records.find((user) => user.id === id) ?? null,
+    findByEmail: async (email) =>
+      records.find((user) => user.email === email) ?? null,
     async create(input) {
       if (records.some((user) => user.email === input.email))
         throw new DomainError('CONFLICT', 'Email is already registered')
@@ -15,7 +18,49 @@ export function fixture(overrides: Partial<Dependencies> = {}) {
     },
   }
   const dependencies: Dependencies = {
+    products: {
+      list: async () => [],
+      find: async () => null,
+      create: async () => {
+        throw new Error('Not configured')
+      },
+      update: async () => {
+        throw new Error('Not configured')
+      },
+      remove: async () => {
+        throw new Error('Not configured')
+      },
+    },
+    orders: {
+      list: async () => [],
+      find: async () => null,
+      create: async () => {
+        throw new Error('Not configured')
+      },
+      replace: async () => {
+        throw new Error('Not configured')
+      },
+      cancel: async () => {
+        throw new Error('Not configured')
+      },
+    },
+    favorites: {
+      list: async () => [],
+      add: async () => {},
+      remove: async () => {},
+    },
     users,
+    tokens: {
+      issue: async (id) => ({
+        accessToken: `test-token:${id}`,
+        expiresIn: 3600,
+      }),
+      verify: async (token) => {
+        if (!/^test-token:[1-9]\d*$/.test(token))
+          throw new DomainError('UNAUTHENTICATED', 'Invalid or expired token')
+        return Number(token.split(':')[1])
+      },
+    },
     passwords: {
       hash: async (value) => `hash:${value}`,
       verify: async (value, hash) => hash === `hash:${value}`,

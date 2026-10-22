@@ -31,3 +31,11 @@ export const registrationBody = validator('json', (value: unknown) => {
     throw new HTTPException(400, { message: 'Invalid name' })
   return { email, password, name }
 })
+
+export const loginBody = validator('json', (value: unknown) => {
+  const input = object(value)
+  const email = text(input.email, 'email', 254).trim().toLowerCase()
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+    throw new HTTPException(400, { message: 'Invalid email' })
+  return { email, password: text(input.password, 'password', 128) }
+})
