@@ -4,6 +4,7 @@ import { DomainError } from '../../domain/errors.ts'
 
 export function userRepository(prisma: PrismaClient): UserRepository {
   return {
+    findByEmail: (email) => prisma.user.findUnique({ where: { email } }),
     async create(input) {
       try {
         return await prisma.user.create({ data: input })

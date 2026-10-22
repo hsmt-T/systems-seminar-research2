@@ -37,3 +37,23 @@ node scripts/check-api.mjs tests/integration/register.jsonl
 ```
 
 Hono CLIのworkerdランタイムで検証し、毎回異なるテストアカウントを作成する。
+
+## POST /auth/login
+
+入力: `{ "email": "alice@example.com", "password": "a-long-password" }`。
+成功時は200で `{ user, accessToken, tokenType: "Bearer", expiresIn: 3600 }` を返す。
+未登録・パスワード不一致はいずれも401。同じアカウントで登録後に利用する。
+JWTはHS256、issuer `hono-ec-api`、audience `ec-client`、有効期間1時間。
+`Authorization: Bearer <accessToken>` を認証が必要なAPIに付ける。
+
+起動前に32文字以上のランダムな `JWT_SECRET` を設定する。
+Dockerでは `.dev.vars.docker`、ホストでは `.dev.vars` に次の出力を追記する。
+既存のキーは上書きせず、既存の値を漏えいしないよう扱う。
+
+```sh
+node -e 'console.log("JWT_SECRET=" + require("node:crypto").randomBytes(32).toString("hex"))'
+# 本番Workersのシークレット登録
+pnpm exec wrangler secret put JWT_SECRET
+```
+
+平文の既存 `User.pass` はログインに利用できない。パスワードを再登録する運用が必要。

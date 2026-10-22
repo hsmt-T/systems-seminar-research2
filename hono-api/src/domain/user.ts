@@ -15,6 +15,7 @@ export function publicUser(user: User): PublicUser {
   }
 }
 export interface UserRepository {
+  findByEmail(email: string): Promise<User | null>
   create(input: {
     email: string
     name: string | null
