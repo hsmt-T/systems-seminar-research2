@@ -1,6 +1,7 @@
 {
   "name": "hono-api",
   "type": "module",
+  "packageManager": "pnpm@10.24.0",
   "scripts": {
     "dev": "pnpm cf-typegen && pnpm db:generate && wrangler dev",
     "deploy": "pnpm db:generate && wrangler deploy --minify",
