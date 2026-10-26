@@ -2,6 +2,8 @@ import { productRoutes } from './routes/products.ts'
 import { orderRoutes } from './routes/orders.ts'
 import { favoriteRoutes } from './routes/favorites.ts'
 import { Hono } from 'hono'
+import { swaggerUI } from '@hono/swagger-ui'
+import { openApiDocument } from './openapi.ts'
 import { bodyLimit } from 'hono/body-limit'
 import { HTTPException } from 'hono/http-exception'
 import type { AppEnv, Dependencies } from './dependencies.ts'
@@ -35,6 +37,8 @@ export function createApp(
     return c.json({ error: 'Internal server error' }, 500)
   })
   app.get('/', (c) => c.text('Hello Hono!'))
+  app.get('/openapi.json', (c) => c.json(openApiDocument))
+  app.get('/docs', swaggerUI({ url: '/openapi.json' }))
   app.get('/health', (c) => c.json({ status: 'ok' }))
   app.get('/health/db', async (c) => {
     try {
