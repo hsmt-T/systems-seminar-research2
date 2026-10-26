@@ -3,6 +3,14 @@
 出典: [Notion ECサイト](https://app.notion.com/p/3fadfe8ca821806fba05eaad08f869d3)。
 TODOに詳細仕様がないため、下記を実装上の仕様として定義する。
 
+## Swagger UI
+
+`/docs` で Swagger UI、`/openapi.json` で OpenAPI 3.0 定義を公開します。
+ログインの `accessToken` を `Authorize` に入力すると Bearer 認証が必要な操作を試せます。
+`src/presentation/openapi.ts` に全 API の入力・出力・エラー・認証要件を定義しています。
+API の仕様を変更する際は、この定義も更新してください。
+`pnpm test` でルートの網羅性と認証要件を検証します。
+
 ## 設計
 
 - domain: エンティティ、リポジトリのインターフェース、業務エラー。Hono/Prismaに依存しない。

@@ -213,5 +213,14 @@ docker compose run --rm \
 
 ## EC API
 
+Swagger UI は http://localhost:8787/docs、OpenAPI 3.0 定義は
+http://localhost:8787/openapi.json で公開します。
+認証・商品・在庫・注文・お気に入りの入力とレスポンスを確認できます。
+`POST /auth/register` で登録し、`POST /auth/login` の `accessToken` を
+Swagger UI の `Authorize` に入力すると、認証付き API を実行できます。
+トークン本体だけを入力してください（`Bearer` は自動付与）。
+`Try it out` の実行は接続先 DB のデータを更新します。
+Swagger UI は CDN から JavaScript・CSS を読み込みます。
+
 エンドポイント、入力・出力、オニオンアーキテクチャの構成は [docs/API.md](docs/API.md) を参照してください。
 `pnpm test` でAPIとユースケースのテストを実行します。

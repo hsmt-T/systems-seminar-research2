@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@hono/swagger-ui':
+        specifier: ^0.6.1
+        version: 0.6.1(hono@4.13.13)
       '@prisma/adapter-pg':
         specifier: '7'
         version: 7.10.1
@@ -489,6 +492,11 @@ packages:
     resolution: {integrity: sha512-qv5nA9BWdrDez6zHgHXhhPxSVTZ2PL02tH3cfeOTa+mDJIFZnLHKgr8S67VaFewtE2fEpkFo+koQ4qYgaXgv9A==}
     engines: {node: '>=22.13.0'}
     hasBin: true
+
+  '@hono/swagger-ui@0.6.1':
+    resolution: {integrity: sha512-sJTvldu1GPeEPfyeLG7gRj+W4vEuD+JDi+JjJ3TJs/DvMUtBLs0KJO5yokGegWWdy5qrbdnQGekbhgNRmPmYKQ==}
+    peerDependencies:
+      hono: '>=4.0.0'
 
   '@humanfs/core@0.19.2':
     resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==}
@@ -2052,6 +2060,10 @@ snapshots:
       hono: 4.13.13
     transitivePeerDependencies:
       - '@types/node'
+
+  '@hono/swagger-ui@0.6.1(hono@4.13.13)':
+    dependencies:
+      hono: 4.13.13
 
   '@humanfs/core@0.19.2':
     dependencies:
