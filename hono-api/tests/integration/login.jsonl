@@ -1,0 +1,4 @@
+{"method":"POST","path":"/auth/register","body":{"email":"login-test@example.com","password":"integration-test-password"},"expect":{"status":201}}
+{"method":"POST","path":"/auth/login","body":{"email":"login-test@example.com","password":"integration-test-password"},"expect":{"status":200,"body":{"tokenType":"Bearer","expiresIn":3600}}}
+{"method":"POST","path":"/auth/login","body":{"email":"login-test@example.com","password":"incorrect-password"},"expect":{"status":401}}
+{"method":"POST","path":"/auth/login","body":{"email":"unknown@example.com","password":"incorrect-password"},"expect":{"status":401}}
