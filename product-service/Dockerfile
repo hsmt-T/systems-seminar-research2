@@ -16,3 +16,4 @@ WORKDIR /app
 EXPOSE 50051
 
 CMD ["bash"]
+
