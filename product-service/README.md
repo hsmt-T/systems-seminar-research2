@@ -91,6 +91,8 @@ ID=2 商品名=メカニカルキーボード 価格=8980円
 
 ## 開発時の確認
 
+GitHub Actionsの `Product Service CI` は、各PR・mainへのpush・手動実行で `gofmt` の整形チェックと `go test ./...` を実行します。CIではDBを起動しないため、PostgreSQL結合テストはスキップします。
+
 ```shell
 go generate ./...
 go test ./...
