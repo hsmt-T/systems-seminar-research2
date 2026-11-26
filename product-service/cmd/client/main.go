@@ -26,10 +26,12 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	res1, err := client.GetProduct(ctx, &pb.GetProductReq{Id: 2})
+	res, err := client.ListProducts(ctx, &pb.ListProductsReq{})
 	if err != nil {
 		log.Fatal(err)
 	}
-	product := res1.GetProduct()
-	log.Printf("ID=%d 商品名=%s 価格=%d円", product.GetId(), product.GetName(), product.GetPrice())
+	log.Printf("商品数=%d", len(res.GetProducts()))
+	for _, product := range res.GetProducts() {
+		log.Printf("ID=%d 商品名=%s 価格=%d円", product.GetId(), product.GetName(), product.GetPrice())
+	}
 }

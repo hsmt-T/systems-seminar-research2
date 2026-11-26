@@ -8,6 +8,33 @@ import (
 
 var ErrProductNotFound = errors.New("product not found")
 var ErrInvalidProductID = errors.New("product ID must be positive")
+var ErrInvalidProductInput = errors.New("invalid product input")
+var ErrSKUAlreadyExists = errors.New("SKU already exists")
+
+type Page struct {
+	Limit  int64
+	Offset int64
+}
+
+type ProductInput struct {
+	SKU   string
+	Name  string
+	Price int64
+	Stock int64
+}
+
+type ProductPatch struct {
+	SKU   *string
+	Name  *string
+	Price *int64
+	Stock *int64
+}
+
+type ProductWriter interface {
+	Create(context.Context, int64, ProductInput) (Product, error)
+	Update(context.Context, int64, ProductPatch) (Product, error)
+	Delete(context.Context, int64) error
+}
 
 type Product interface {
 	ID() int64
@@ -62,4 +89,6 @@ func NewProduct(id, ownerID int64, sku, name string, price, stock int64, created
 
 type ProductRepository interface {
 	FindByID(ctx context.Context, id int64) (Product, error)
+	FindAll(ctx context.Context) ([]Product, error)
+	List(ctx context.Context, page Page) ([]Product, error)
 }

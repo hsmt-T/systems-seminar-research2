@@ -8,6 +8,10 @@ option go_package = "github.com/hsmt-T/systems-seminar-research2/product-service
 
 service ProductService {
     rpc GetProduct(GetProductReq) returns (GetProductRes);
+    rpc ListProducts(ListProductsReq) returns (ListProductsRes);
+    rpc CreateProduct(CreateProductReq) returns (CreateProductRes);
+    rpc UpdateProduct(UpdateProductReq) returns (UpdateProductRes);
+    rpc DeleteProduct(DeleteProductReq) returns (DeleteProductRes);
 }
 
 message Product {
@@ -28,3 +32,44 @@ message GetProductReq {
 message GetProductRes {
     Product product = 1;
 }
+
+message ListProductsReq {
+    // Both omitted: return all products. Otherwise limit defaults to 50.
+    optional int64 limit = 1;
+    optional int64 offset = 2;
+}
+
+message ListProductsRes {
+    repeated Product products = 1;
+}
+
+// owner_id is stored as product data; authentication is not performed.
+message CreateProductReq {
+    int64 owner_id = 1;
+    string sku = 2;
+    string name = 3;
+    optional int64 price = 4;
+    optional int64 stock = 5;
+}
+
+message CreateProductRes {
+    Product product = 1;
+}
+
+message UpdateProductReq {
+    int64 id = 1;
+    optional string sku = 3;
+    optional string name = 4;
+    optional int64 price = 5;
+    optional int64 stock = 6;
+}
+
+message UpdateProductRes {
+    Product product = 1;
+}
+
+message DeleteProductReq {
+    int64 id = 1;
+}
+
+message DeleteProductRes {}

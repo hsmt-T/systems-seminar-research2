@@ -12,6 +12,14 @@ import (
 
 type repositoryFunc func(context.Context, int64) (domain.Product, error)
 
+func (f repositoryFunc) List(context.Context, domain.Page) ([]domain.Product, error) {
+	return nil, errors.New("unexpected List call")
+}
+
+func (f repositoryFunc) FindAll(context.Context) ([]domain.Product, error) {
+	return nil, errors.New("unexpected FindAll call")
+}
+
 func (f repositoryFunc) FindByID(ctx context.Context, id int64) (domain.Product, error) {
 	return f(ctx, id)
 }

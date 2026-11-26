@@ -38,7 +38,7 @@ func run() error {
 	server := grpc.NewServer()
 	products := repo.NewGetRepo(pool)
 	findProduct := usecase.NewFindByID(products)
-	handler := presentation.NewProductHandler(findProduct)
+	handler := presentation.NewProductHandler(findProduct, usecase.NewFindAll(products), usecase.NewMutations(products))
 	pb.RegisterProductServiceServer(server, handler)
 
 	log.Printf("ProductServiceをポート50051で起動します")
